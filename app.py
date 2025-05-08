@@ -1,8 +1,13 @@
 import gradio as gr
 import os
 from groq import Groq
+from dotenv import load_dotenv
 
-client = Groq(api_key= "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")  # Assumes GROQ_API_KEY is in .env file
+# Load environment variables from .env file
+load_dotenv()
+
+# Initialize Groq client with API key from .env
+client = Groq(api_key=os.getenv("GROK_API_KEY"))
 
 system_prompt = "You are a Travel Advisor. Provide helpful travel tips, recommend destinations, and suggest itineraries based on user queries."
 
@@ -166,30 +171,4 @@ with gr.Blocks(css=custom_css) as demo:
             choices=["Concise", "Moderate", "Explained"],
             value="Moderate",
             label="Response Length",
-            info="Choose how detailed you want the response to be."
-        )
-    
-    # Submit and clear buttons
-    with gr.Row():
-        submit_button = gr.Button("Send")
-        clear_button = gr.Button("Clear Chat")
-    
-    # State to store chat history
-    chat_state = gr.State(value=[])
-    
-    # Connect button to function
-    submit_button.click(
-        fn=chatbot_response,
-        inputs=[user_message, chat_state, output_length],
-        outputs=[chatbot, chat_state, user_message]
-    )
-    
-    # Clear chat functionality
-    clear_button.click(
-        fn=lambda: ([], [], ""),
-        inputs=None,
-        outputs=[chatbot, chat_state, user_message]
-    )
-
-# Launch the app
-demo.launch()
+            info="Choose how detailed you
